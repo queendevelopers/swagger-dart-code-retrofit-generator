@@ -9,6 +9,8 @@ environment:
 dependencies:
   chopper: ^6.1.1
   json_annotation: ^4.8.0
+  retrofit: ^4.1.0
+  retrofit_generator: ^8.1.0
 
 dev_dependencies:
   swagger_dart_code_generator:
