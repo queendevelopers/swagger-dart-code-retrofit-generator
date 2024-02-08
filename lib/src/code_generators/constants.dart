@@ -39,10 +39,10 @@ const kMapStringDynamic = 'Map<String,dynamic>';
 const kRequired = 'required';
 
 const kChopperService = 'ChopperService';
-const kChopperApi = 'ChopperApi';
+const kRestApi = 'RestApi';
 const kResponse = 'Response';
 const kRequestBody = 'RequestBody';
-const kFutureResponse = 'Future<chopper.Response>';
+const kFutureResponse = 'Future<retrofit.HttpResponse>';
 const kString = 'string';
 const kInteger = 'integer';
 const kInt64 = 'int64';
@@ -106,6 +106,6 @@ const kNullable = 'nullable';
 
 const kServiceHeader = '''
 // **************************************************************************
-// SwaggerChopperGenerator
+// SwaggerRetrpfotGenerator
 // **************************************************************************
   ''';
