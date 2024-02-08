@@ -61,61 +61,36 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
 
     return Class(
       (c) => c
-        ..methods.addAll([
+        ..methods.addAll([...allMethodsContent])
+        ..constructors.addAll([
           _generateCreateMethod(className, chopperClient),
-          ...allMethodsContent
         ])
-        ..extend = Reference(kChopperService)
+        // ..extend = Reference(kChopperService)
         ..docs.add(kServiceHeader)
-        ..annotations.add(refer(kChopperApi).call([]))
+        ..annotations.add(refer(kRestApi).call([],{'baseUrl':  Reference("'http://${swaggerRoot.host}${swaggerRoot.basePath}'")}))
         ..abstract = true
         ..name = className,
     );
   }
 
-  Method _generateCreateMethod(String className, String body) {
-    return Method(
-      (m) => m
-        ..returns = Reference(className)
-        ..name = 'create'
-        ..static = true
-        ..optionalParameters.add(Parameter(
+  Constructor _generateCreateMethod(String className, String body) {
+    return Constructor(
+      (c) => c
+        ..factory =true
+        ..name = className
+        ..requiredParameters.add(Parameter(
           (p) => p
-            ..named = true
-            ..type = Reference('ChopperClient?')
-            ..name = 'client',
+            ..named = false
+            ..type = Reference('Dio')
+            ..name = 'dio',
         ))
         ..optionalParameters.add(Parameter(
           (p) => p
             ..named = true
-            ..type = Reference('http.Client?')
-            ..name = 'httpClient',
-        ))
-        ..optionalParameters.add(Parameter(
-          (p) => p
-            ..named = true
-            ..type = Reference('Authenticator?')
-            ..name = 'authenticator',
-        ))
-        ..optionalParameters.add(Parameter(
-          (p) => p
-            ..named = true
-            ..type = Reference('Converter?')
-            ..name = 'converter',
-        ))
-        ..optionalParameters.add(Parameter(
-          (p) => p
-            ..named = true
-            ..type = Reference('Uri?')
+            ..type = Reference('String?')
             ..name = 'baseUrl',
         ))
-        ..optionalParameters.add(Parameter(
-          (p) => p
-            ..named = true
-            ..type = Reference('Iterable<dynamic>?')
-            ..name = 'interceptors',
-        ))
-        ..body = Code(body),
+        ..redirect = Reference('_$className')
     );
   }
 
