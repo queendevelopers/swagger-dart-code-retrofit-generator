@@ -461,12 +461,10 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
     bool isMultipart,
   ) {
     return [
-      refer(requestType.toUpperCase()).call(
+      refer(requestType).call(
         [literalString(path)],
-        {
-          if (hasOptionalBody) 'optionalBody': refer(true.toString()),
-        },
-      ),
+      ),           
+      if (hasOptionalBody) refer('NoBody').call([]),
       if (isMultipart)
         refer(kMultipart.pascalCase).call(
           [],
