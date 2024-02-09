@@ -42,7 +42,7 @@ extension TypeExtension on String {
 
   String asEnum() => 'enums.$this';
 
-  String asFutureResponse() => 'Future<chopper.Response<$this>>';
+  String asFutureResponse() => 'Future<retrofit.HttpResponse<$this>>';
 
   String asParameterName() {
     final result = SwaggerModelsGenerator.getValidatedParameterName(this);

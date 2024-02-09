@@ -46,11 +46,11 @@ void main() {
         fileName: 'cars_service',
       );
 
-      expect(result2, contains('Future<chopper.Response<CarModel>>'));
-      expect(result, contains('Future<chopper.Response<CarModel>> carsGet'));
-      expect(result, contains('Future<chopper.Response<CarModel>> carsPost'));
+      expect(result2, contains('Future<retrofit.HttpResponse<CarModel>>'));
+      expect(result, contains('Future<retrofit.HttpResponse<CarModel>> carsGet'));
+      expect(result, contains('Future<retrofit.HttpResponse<CarModel>> carsPost'));
       expect(result,
-          contains('Future<chopper.Response<CarModel>> carsMultipartPost'));
+          contains('Future<retrofit.HttpResponse<CarModel>> carsMultipartPost'));
     });
   });
 }
