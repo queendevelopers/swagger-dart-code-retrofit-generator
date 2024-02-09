@@ -461,10 +461,9 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
     bool isMultipart,
   ) {
     return [
-      refer(requestType.pascalCase).call(
-        [],
+      refer(requestType.toUpperCase()).call(
+        [literalString(path)],
         {
-          kPath: literalString(path),
           if (hasOptionalBody) 'optionalBody': refer(true.toString()),
         },
       ),
@@ -522,9 +521,9 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
             .call([literalString(parameter.name.replaceAll('\$', ''))]);
       case kBody:
         return refer(kBody.pascalCase).call([]);
-      case kQuery:
-        return refer(parameter.explode ? kExplodedQuery : kQuery.pascalCase)
-            .call([]);
+      // case kQuery:
+      //   return refer(parameter.explode ? kExplodedQuery : kQuery.pascalCase)
+      //       .call([]);
       default:
         //https://github.com/lejard-h/chopper/issues/295
         return refer(parameter.inParameter.pascalCase)
