@@ -97,7 +97,7 @@ const kDateTimeType = 'DateTime';
 
 const kDynamic = 'dynamic';
 
-const supportedRequestTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'];
+const supportedRequestTypes = ['get', 'post', 'put', 'delete', 'head', 'patch'];
 
 const kEnumNames = 'x-enumNames';
 const kEnumVarnames = 'x-enum-varnames';
@@ -106,6 +106,6 @@ const kNullable = 'nullable';
 
 const kServiceHeader = '''
 // **************************************************************************
-// SwaggerRetrpfotGenerator
+// SwaggerRetrofitGenerator
 // **************************************************************************
   ''';
