@@ -161,7 +161,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         }
 
         final hasOptionalBody =
-            ['POST', 'PUT', 'PATCH'].contains(requestType) &&
+            ['post', 'put', 'patch'].contains(requestType) &&
                 swaggerRequest.parameters.none((p) => p.inParameter == kBody);
 
         final isMultipart = parameters.any((p) {
@@ -183,7 +183,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
           ))
           ..name = methodName
           ..annotations.addAll(_getMethodAnnotation(
-              requestType.toUpperCase(), annotationPath, hasOptionalBody, isMultipart))
+              requestType, annotationPath, hasOptionalBody, isMultipart))
           ..returns = Reference(returns));
 
         final allModels = _getAllMethodModels(
@@ -193,8 +193,8 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         );
 
         final privateMethod = _getPrivateMethod(method);
-        final publicMethod = _getPublicMethod(method, allModels);
-        methods.addAll([publicMethod, privateMethod]);
+        // final publicMethod = _getPublicMethod(method, allModels);
+        methods.addAll([ privateMethod]);
       });
     });
 
@@ -379,7 +379,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
       (m) => m
         ..optionalParameters.addAll(parameters)
         ..docs.addAll(method.docs)
-        ..name = '_${method.name}'
+        ..name = '${method.name}'
         ..annotations.addAll(method.annotations)
         ..returns = method.returns,
     );
@@ -461,7 +461,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
     bool isMultipart,
   ) {
     return [
-      refer(requestType).call(
+      refer(requestType.toUpperCase()).call(
         [literalString(path)],
       ),           
       if (hasOptionalBody) refer('NoBody').call([]),
