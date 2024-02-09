@@ -46,9 +46,6 @@ class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
   ) {
     final result = StringBuffer();
 
-    final retrofitPartImport =
-        buildOnlyModels ? '' : "part '$swaggerFileName.swagger.retrofit.dart';";
-
     final overridenModels = options.overridenModels.isEmpty
         ? ''
         : 'import \'overriden_models.dart\';';
@@ -105,9 +102,6 @@ ${options.overrideToString ? "import 'dart:convert';" : ''}
 
     result.write('\n\n');
 
-    if (retrofitPartImport.isNotEmpty) {
-      result.write(retrofitPartImport);
-    }
     if (hasModels && !separateModels) {
       result.write("part '$swaggerFileName.swagger.g.dart';");
     }
