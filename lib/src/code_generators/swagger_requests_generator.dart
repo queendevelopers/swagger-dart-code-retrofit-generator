@@ -191,10 +191,9 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
           swaggerRequest,
           returnTypeName,
         );
-
+        //Although the name is privateMethod, it's public method! :D 
         final privateMethod = _getPrivateMethod(method);
-        // final publicMethod = _getPublicMethod(method, allModels);
-        methods.addAll([ privateMethod]);
+        methods.addAll([privateMethod]);
       });
     });
 
@@ -379,7 +378,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
       (m) => m
         ..optionalParameters.addAll(parameters)
         ..docs.addAll(method.docs)
-        ..name = '${method.name}'
+        ..name = method.name
         ..annotations.addAll(method.annotations)
         ..returns = method.returns,
     );
