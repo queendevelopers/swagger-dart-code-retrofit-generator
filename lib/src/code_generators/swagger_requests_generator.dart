@@ -161,7 +161,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         }
 
         final hasOptionalBody =
-            ['post', 'put', 'patch'].contains(requestType) &&
+            ['POST', 'PUT', 'PATCH'].contains(requestType) &&
                 swaggerRequest.parameters.none((p) => p.inParameter == kBody);
 
         final isMultipart = parameters.any((p) {
@@ -183,7 +183,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
           ))
           ..name = methodName
           ..annotations.addAll(_getMethodAnnotation(
-              requestType, annotationPath, hasOptionalBody, isMultipart))
+              requestType.toUpperCase(), annotationPath, hasOptionalBody, isMultipart))
           ..returns = Reference(returns));
 
         final allModels = _getAllMethodModels(

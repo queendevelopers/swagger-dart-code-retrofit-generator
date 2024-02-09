@@ -97,7 +97,7 @@ const kDateTimeType = 'DateTime';
 
 const kDynamic = 'dynamic';
 
-const supportedRequestTypes = ['get', 'post', 'put', 'delete', 'head', 'patch'];
+const supportedRequestTypes = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'];
 
 const kEnumNames = 'x-enumNames';
 const kEnumVarnames = 'x-enum-varnames';
