@@ -46,22 +46,23 @@ class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
   ) {
     final result = StringBuffer();
 
-    final chopperPartImport =
-        buildOnlyModels ? '' : "part '$swaggerFileName.swagger.chopper.dart';";
+    final retrofitPartImport =
+        buildOnlyModels ? '' : "part '$swaggerFileName.swagger.retrofit.dart';";
 
     final overridenModels = options.overridenModels.isEmpty
         ? ''
         : 'import \'overriden_models.dart\';';
 
-    final chopperImports = buildOnlyModels
+    final retrofitImports = buildOnlyModels
         ? ''
-        : '''import 'package:chopper/chopper.dart';
+        : '''import 'package:retrofit/retrofit.dart';
 
 import 'client_mapping.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart' show MultipartFile;
-import 'package:chopper/chopper.dart' as chopper;''';
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart' as retrofit;''';
 
     final enumsImport = hasEnums
         ? "import '$swaggerFileName.enums.swagger.dart' as enums;"
@@ -84,8 +85,8 @@ ${options.overrideToString ? "import 'dart:convert';" : ''}
 
     result.write(overridenModels);
 
-    if (chopperImports.isNotEmpty) {
-      result.write(chopperImports);
+    if (retrofitImports.isNotEmpty) {
+      result.write(retrofitImports);
     }
     if (enumsImport.isNotEmpty) {
       result.write(enumsImport);
@@ -104,8 +105,8 @@ ${options.overrideToString ? "import 'dart:convert';" : ''}
 
     result.write('\n\n');
 
-    if (chopperPartImport.isNotEmpty) {
-      result.write(chopperPartImport);
+    if (retrofitPartImport.isNotEmpty) {
+      result.write(retrofitPartImport);
     }
     if (hasModels && !separateModels) {
       result.write("part '$swaggerFileName.swagger.g.dart';");
@@ -161,14 +162,6 @@ class \$CustomJsonDecoder {
       return entity;
     }
 
-    if (isTypeOf<T, Map>()) {
-      return entity;
-    }
-
-     if(isTypeOf<T, Iterable>()) {
-      return entity;
-    }
-
     if (entity is Map<String, dynamic>) {
       return _decodeMap<T>(entity);
     }
@@ -187,31 +180,6 @@ class \$CustomJsonDecoder {
 
   List<T> _decodeList<T>(Iterable values) =>
       values.where((v) => v != null).map<T>((v) => decode<T>(v) as T).toList();
-}
-
-class \$JsonSerializableConverter extends chopper.JsonConverter {
-  @override
-  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(chopper.Response response) async {
-    if (response.bodyString.isEmpty) {
-      // In rare cases, when let's say 204 (no content) is returned -
-      // we cannot decode the missing json with the result type specified
-      return chopper.Response(response.base, null, error: response.error);
-    }
-
-    if (ResultType == String) {
-      return response.copyWith();
-    }
-
-    if (ResultType == DateTime) {
-      return response.copyWith(
-          body: DateTime.parse((response.body as String).replaceAll('"', ''))
-              as ResultType);
-    }
-
-    final jsonRes = await super.convertResponse(response);
-    return jsonRes.copyWith<ResultType>(
-        body: \$jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
-  }
 }
 
 final \$jsonDecoder = \$CustomJsonDecoder(generatedMapping);
