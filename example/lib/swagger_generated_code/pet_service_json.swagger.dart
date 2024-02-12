@@ -4,146 +4,66 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
 import 'dart:convert';
 
-import 'overriden_models.dart';
-import 'package:chopper/chopper.dart';
+import 'package:retrofit/retrofit.dart';
 
 import 'client_mapping.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart' show MultipartFile;
-import 'package:chopper/chopper.dart' as chopper;
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart' as retrofit;
 import 'pet_service_json.enums.swagger.dart' as enums;
 export 'pet_service_json.enums.swagger.dart';
 
-part 'pet_service_json.swagger.chopper.dart';
 part 'pet_service_json.swagger.g.dart';
 
 // **************************************************************************
-// SwaggerChopperGenerator
+// SwaggerRetrofitGenerator
 // **************************************************************************
 
-@ChopperApi()
-abstract class PetServiceJson extends ChopperService {
-  static PetServiceJson create({
-    ChopperClient? client,
-    http.Client? httpClient,
-    Authenticator? authenticator,
-    Converter? converter,
-    Uri? baseUrl,
-    Iterable<dynamic>? interceptors,
-  }) {
-    if (client != null) {
-      return _$PetServiceJson(client);
-    }
-
-    final newClient = ChopperClient(
-        services: [_$PetServiceJson()],
-        converter: converter ?? $JsonSerializableConverter(),
-        interceptors: interceptors ?? [],
-        client: httpClient,
-        authenticator: authenticator,
-        baseUrl: baseUrl ?? Uri.parse('http://petstore.swagger.io/v2'));
-    return _$PetServiceJson(newClient);
-  }
+@RestApi(baseUrl: 'http://petstore.swagger.io/v2')
+abstract class PetServiceJson {
+  factory PetServiceJson.PetServiceJson(
+    Dio dio, {
+    String? baseUrl,
+  }) = _PetServiceJson;
 
   ///Add a new pet to the store
   ///@param body Pet object that needs to be added to the store
-  Future<chopper.Response> petPost({
-    required Pet? body,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Pet, () => Pet.fromJsonFactory);
-
-    return _petPost(body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Add a new pet to the store
-  ///@param body Pet object that needs to be added to the store
-  @Post(path: '/pet')
-  Future<chopper.Response> _petPost({
+  @POST('/pet')
+  Future<retrofit.HttpResponse> petPost({
     @Body() required Pet? body,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Update an existing pet
   ///@param body Pet object that needs to be added to the store
-  Future<chopper.Response> petPut({
-    required Pet? body,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Pet, () => Pet.fromJsonFactory);
-
-    return _petPut(body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Update an existing pet
-  ///@param body Pet object that needs to be added to the store
-  @Put(path: '/pet')
-  Future<chopper.Response> _petPut({
+  @PUT('/pet')
+  Future<retrofit.HttpResponse> petPut({
     @Body() required Pet? body,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Finds Pets by status
   ///@param status Status values that need to be considered for filter
-  Future<chopper.Response<List<Pet>>> petFindByStatusGet({
-    required List<enums.PetFindByStatusGetStatus>? status,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Pet, () => Pet.fromJsonFactory);
-
-    return _petFindByStatusGet(
-        status: petFindByStatusGetStatusListToJson(status),
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///Finds Pets by status
-  ///@param status Status values that need to be considered for filter
-  @Get(path: '/pet/findByStatus')
-  Future<chopper.Response<List<Pet>>> _petFindByStatusGet({
-    @Query() required List<Object?>? status,
+  @GET('/pet/findByStatus')
+  Future<retrofit.HttpResponse<List<Pet>>> petFindByStatusGet({
+    @Query('status') required List<Object?>? status,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Finds Pets by tags
   ///@param tags Tags to filter by
-  Future<chopper.Response<List<Pet>>> petFindByTagsGet({
-    required List<String>? tags,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Pet, () => Pet.fromJsonFactory);
-
-    return _petFindByTagsGet(
-        tags: tags, cacheControl: cacheControl?.toString());
-  }
-
-  ///Finds Pets by tags
-  ///@param tags Tags to filter by
-  @Get(path: '/pet/findByTags')
-  Future<chopper.Response<List<Pet>>> _petFindByTagsGet({
-    @Query() required List<String>? tags,
+  @GET('/pet/findByTags')
+  Future<retrofit.HttpResponse<List<Pet>>> petFindByTagsGet({
+    @Query('tags') required List<String>? tags,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Find pet by ID
   ///@param petId ID of pet to return
-  Future<chopper.Response<Pet>> petPetIdGet({
-    required int? petId,
-    dynamic apiKey,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Pet, () => Pet.fromJsonFactory);
-
-    return _petPetIdGet(
-        petId: petId,
-        apiKey: apiKey?.toString(),
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///Find pet by ID
-  ///@param petId ID of pet to return
-  @Get(path: '/pet/{petId}')
-  Future<chopper.Response<Pet>> _petPetIdGet({
+  @GET('/pet/{petId}')
+  Future<retrofit.HttpResponse<Pet>> petPetIdGet({
     @Path('petId') required int? petId,
     @Header('api_key') String? apiKey,
     @Header('Cache-Control') String? cacheControl,
@@ -153,28 +73,9 @@ abstract class PetServiceJson extends ChopperService {
   ///@param petId ID of pet that needs to be updated
   ///@param name Updated name of the pet
   ///@param status Updated status of the pet
-  Future<chopper.Response> petPetIdPost({
-    required int? petId,
-    String? name,
-    String? status,
-    dynamic cacheControl,
-  }) {
-    return _petPetIdPost(
-        petId: petId,
-        name: name,
-        status: status,
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///Updates a pet in the store with form data
-  ///@param petId ID of pet that needs to be updated
-  ///@param name Updated name of the pet
-  ///@param status Updated status of the pet
-  @Post(
-    path: '/pet/{petId}',
-    optionalBody: true,
-  )
-  Future<chopper.Response> _petPetIdPost({
+  @POST('/pet/{petId}')
+  @NoBody()
+  Future<retrofit.HttpResponse> petPetIdPost({
     @Path('petId') required int? petId,
     @Field('name') String? name,
     @Field('status') String? status,
@@ -184,22 +85,8 @@ abstract class PetServiceJson extends ChopperService {
   ///Deletes a pet
   ///@param api_key
   ///@param petId Pet id to delete
-  Future<chopper.Response> petPetIdDelete({
-    String? apiKey,
-    required int? petId,
-    dynamic cacheControl,
-  }) {
-    return _petPetIdDelete(
-        apiKey: apiKey?.toString(),
-        petId: petId,
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///Deletes a pet
-  ///@param api_key
-  ///@param petId Pet id to delete
-  @Delete(path: '/pet/{petId}')
-  Future<chopper.Response> _petPetIdDelete({
+  @DELETE('/pet/{petId}')
+  Future<retrofit.HttpResponse> petPetIdDelete({
     @Header('api_key') String? apiKey,
     @Path('petId') required int? petId,
     @Header('Cache-Control') String? cacheControl,
@@ -209,31 +96,9 @@ abstract class PetServiceJson extends ChopperService {
   ///@param petId ID of pet to update
   ///@param additionalMetadata Additional data to pass to server
   ///@param file file to upload
-  Future<chopper.Response<ApiResponse>> petPetIdUploadImagePost({
-    required int? petId,
-    String? additionalMetadata,
-    List<int>? file,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(
-        ApiResponse, () => ApiResponse.fromJsonFactory);
-
-    return _petPetIdUploadImagePost(
-        petId: petId,
-        additionalMetadata: additionalMetadata,
-        file: file,
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///uploads an image
-  ///@param petId ID of pet to update
-  ///@param additionalMetadata Additional data to pass to server
-  ///@param file file to upload
-  @Post(
-    path: '/pet/{petId}/uploadImage',
-    optionalBody: true,
-  )
-  Future<chopper.Response<ApiResponse>> _petPetIdUploadImagePost({
+  @POST('/pet/{petId}/uploadImage')
+  @NoBody()
+  Future<retrofit.HttpResponse<ApiResponse>> petPetIdUploadImagePost({
     @Path('petId') required int? petId,
     @Field('additionalMetadata') String? additionalMetadata,
     @Field('file') List<int>? file,
@@ -241,129 +106,56 @@ abstract class PetServiceJson extends ChopperService {
   });
 
   ///Returns pet inventories by status
-  Future<chopper.Response<Object>> storeInventoryGet({
-    dynamic apiKey,
-    dynamic cacheControl,
-  }) {
-    return _storeInventoryGet(
-        apiKey: apiKey?.toString(), cacheControl: cacheControl?.toString());
-  }
-
-  ///Returns pet inventories by status
-  @Get(path: '/store/inventory')
-  Future<chopper.Response<Object>> _storeInventoryGet({
+  @GET('/store/inventory')
+  Future<retrofit.HttpResponse<Object>> storeInventoryGet({
     @Header('api_key') String? apiKey,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Place an order for a pet
   ///@param body order placed for purchasing the pet
-  Future<chopper.Response<Order>> storeOrderPost({
-    required Order? body,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Order, () => Order.fromJsonFactory);
-
-    return _storeOrderPost(body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Place an order for a pet
-  ///@param body order placed for purchasing the pet
-  @Post(path: '/store/order')
-  Future<chopper.Response<Order>> _storeOrderPost({
+  @POST('/store/order')
+  Future<retrofit.HttpResponse<Order>> storeOrderPost({
     @Body() required Order? body,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Find purchase order by ID
   ///@param orderId ID of pet that needs to be fetched
-  Future<chopper.Response<Order>> storeOrderOrderIdGet({
-    required int? orderId,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(Order, () => Order.fromJsonFactory);
-
-    return _storeOrderOrderIdGet(
-        orderId: orderId, cacheControl: cacheControl?.toString());
-  }
-
-  ///Find purchase order by ID
-  ///@param orderId ID of pet that needs to be fetched
-  @Get(path: '/store/order/{orderId}')
-  Future<chopper.Response<Order>> _storeOrderOrderIdGet({
+  @GET('/store/order/{orderId}')
+  Future<retrofit.HttpResponse<Order>> storeOrderOrderIdGet({
     @Path('orderId') required int? orderId,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Delete purchase order by ID
   ///@param orderId ID of the order that needs to be deleted
-  Future<chopper.Response> storeOrderOrderIdDelete({
-    required int? orderId,
-    dynamic cacheControl,
-  }) {
-    return _storeOrderOrderIdDelete(
-        orderId: orderId, cacheControl: cacheControl?.toString());
-  }
-
-  ///Delete purchase order by ID
-  ///@param orderId ID of the order that needs to be deleted
-  @Delete(path: '/store/order/{orderId}')
-  Future<chopper.Response> _storeOrderOrderIdDelete({
+  @DELETE('/store/order/{orderId}')
+  Future<retrofit.HttpResponse> storeOrderOrderIdDelete({
     @Path('orderId') required int? orderId,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Create user
   ///@param body Created user object
-  Future<chopper.Response> userPost({
-    required User? body,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(User, () => User.fromJsonFactory);
-
-    return _userPost(body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Create user
-  ///@param body Created user object
-  @Post(path: '/user')
-  Future<chopper.Response> _userPost({
+  @POST('/user')
+  Future<retrofit.HttpResponse> userPost({
     @Body() required User? body,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Creates list of users with given input array
   ///@param body List of user object
-  Future<chopper.Response> userCreateWithArrayPost({
-    required List<User>? body,
-    dynamic cacheControl,
-  }) {
-    return _userCreateWithArrayPost(
-        body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Creates list of users with given input array
-  ///@param body List of user object
-  @Post(path: '/user/createWithArray')
-  Future<chopper.Response> _userCreateWithArrayPost({
+  @POST('/user/createWithArray')
+  Future<retrofit.HttpResponse> userCreateWithArrayPost({
     @Body() required List<User>? body,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Creates list of users with given input array
   ///@param body List of user object
-  Future<chopper.Response> userCreateWithListPost({
-    required List<User>? body,
-    dynamic cacheControl,
-  }) {
-    return _userCreateWithListPost(
-        body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Creates list of users with given input array
-  ///@param body List of user object
-  @Post(path: '/user/createWithList')
-  Future<chopper.Response> _userCreateWithListPost({
+  @POST('/user/createWithList')
+  Future<retrofit.HttpResponse> userCreateWithListPost({
     @Body() required List<User>? body,
     @Header('Cache-Control') String? cacheControl,
   });
@@ -371,53 +163,22 @@ abstract class PetServiceJson extends ChopperService {
   ///Logs user into the system
   ///@param username The user name for login
   ///@param password The password for login in clear text
-  Future<chopper.Response<String>> userLoginGet({
-    required String? username,
-    required String? password,
-    dynamic cacheControl,
-  }) {
-    return _userLoginGet(
-        username: username,
-        password: password,
-        cacheControl: cacheControl?.toString());
-  }
-
-  ///Logs user into the system
-  ///@param username The user name for login
-  ///@param password The password for login in clear text
-  @Get(path: '/user/login')
-  Future<chopper.Response<String>> _userLoginGet({
-    @Query() required String? username,
-    @Query() required String? password,
+  @GET('/user/login')
+  Future<retrofit.HttpResponse<String>> userLoginGet({
+    @Query('username') required String? username,
+    @Query('password') required String? password,
     @Header('Cache-Control') String? cacheControl,
   });
 
   ///Logs out current logged in user session
-  Future<chopper.Response> userLogoutGet({dynamic cacheControl}) {
-    return _userLogoutGet(cacheControl: cacheControl?.toString());
-  }
-
-  ///Logs out current logged in user session
-  @Get(path: '/user/logout')
-  Future<chopper.Response> _userLogoutGet(
+  @GET('/user/logout')
+  Future<retrofit.HttpResponse> userLogoutGet(
       {@Header('Cache-Control') String? cacheControl});
 
   ///Get user by user name
   ///@param username The name that needs to be fetched. Use user1 for testing.
-  Future<chopper.Response<User>> userUsernameGet({
-    required String? username,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(User, () => User.fromJsonFactory);
-
-    return _userUsernameGet(
-        username: username, cacheControl: cacheControl?.toString());
-  }
-
-  ///Get user by user name
-  ///@param username The name that needs to be fetched. Use user1 for testing.
-  @Get(path: '/user/{username}')
-  Future<chopper.Response<User>> _userUsernameGet({
+  @GET('/user/{username}')
+  Future<retrofit.HttpResponse<User>> userUsernameGet({
     @Path('username') required String? username,
     @Header('Cache-Control') String? cacheControl,
   });
@@ -425,22 +186,8 @@ abstract class PetServiceJson extends ChopperService {
   ///Updated user
   ///@param username name that need to be updated
   ///@param body Updated user object
-  Future<chopper.Response> userUsernamePut({
-    required String? username,
-    required User? body,
-    dynamic cacheControl,
-  }) {
-    generatedMapping.putIfAbsent(User, () => User.fromJsonFactory);
-
-    return _userUsernamePut(
-        username: username, body: body, cacheControl: cacheControl?.toString());
-  }
-
-  ///Updated user
-  ///@param username name that need to be updated
-  ///@param body Updated user object
-  @Put(path: '/user/{username}')
-  Future<chopper.Response> _userUsernamePut({
+  @PUT('/user/{username}')
+  Future<retrofit.HttpResponse> userUsernamePut({
     @Path('username') required String? username,
     @Body() required User? body,
     @Header('Cache-Control') String? cacheControl,
@@ -448,21 +195,115 @@ abstract class PetServiceJson extends ChopperService {
 
   ///Delete user
   ///@param username The name that needs to be deleted
-  Future<chopper.Response> userUsernameDelete({
-    required String? username,
-    dynamic cacheControl,
-  }) {
-    return _userUsernameDelete(
-        username: username, cacheControl: cacheControl?.toString());
-  }
-
-  ///Delete user
-  ///@param username The name that needs to be deleted
-  @Delete(path: '/user/{username}')
-  Future<chopper.Response> _userUsernameDelete({
+  @DELETE('/user/{username}')
+  Future<retrofit.HttpResponse> userUsernameDelete({
     @Path('username') required String? username,
     @Header('Cache-Control') String? cacheControl,
   });
+}
+
+@JsonSerializable(explicitToJson: true)
+class Order {
+  const Order({
+    this.id,
+    this.petId,
+    this.quantity,
+    this.shipDate,
+    this.status,
+    this.complete,
+  });
+
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
+
+  static const toJsonFactory = _$OrderToJson;
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
+
+  @JsonKey(name: 'id', includeIfNull: false)
+  final int? id;
+  @JsonKey(name: 'petId', includeIfNull: false)
+  final int? petId;
+  @JsonKey(name: 'quantity', includeIfNull: false)
+  final int? quantity;
+  @JsonKey(name: 'shipDate', includeIfNull: false)
+  final DateTime? shipDate;
+  @JsonKey(
+    name: 'status',
+    includeIfNull: false,
+    toJson: orderStatusNullableToJson,
+    fromJson: orderStatusNullableFromJson,
+  )
+  final enums.OrderStatus? status;
+  @JsonKey(name: 'complete', includeIfNull: false, defaultValue: false)
+  final bool? complete;
+  static const fromJsonFactory = _$OrderFromJson;
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is Order &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.petId, petId) ||
+                const DeepCollectionEquality().equals(other.petId, petId)) &&
+            (identical(other.quantity, quantity) ||
+                const DeepCollectionEquality()
+                    .equals(other.quantity, quantity)) &&
+            (identical(other.shipDate, shipDate) ||
+                const DeepCollectionEquality()
+                    .equals(other.shipDate, shipDate)) &&
+            (identical(other.status, status) ||
+                const DeepCollectionEquality().equals(other.status, status)) &&
+            (identical(other.complete, complete) ||
+                const DeepCollectionEquality()
+                    .equals(other.complete, complete)));
+  }
+
+  @override
+  String toString() => jsonEncode(this);
+
+  @override
+  int get hashCode =>
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(petId) ^
+      const DeepCollectionEquality().hash(quantity) ^
+      const DeepCollectionEquality().hash(shipDate) ^
+      const DeepCollectionEquality().hash(status) ^
+      const DeepCollectionEquality().hash(complete) ^
+      runtimeType.hashCode;
+}
+
+extension $OrderExtension on Order {
+  Order copyWith(
+      {int? id,
+      int? petId,
+      int? quantity,
+      DateTime? shipDate,
+      enums.OrderStatus? status,
+      bool? complete}) {
+    return Order(
+        id: id ?? this.id,
+        petId: petId ?? this.petId,
+        quantity: quantity ?? this.quantity,
+        shipDate: shipDate ?? this.shipDate,
+        status: status ?? this.status,
+        complete: complete ?? this.complete);
+  }
+
+  Order copyWithWrapped(
+      {Wrapped<int?>? id,
+      Wrapped<int?>? petId,
+      Wrapped<int?>? quantity,
+      Wrapped<DateTime?>? shipDate,
+      Wrapped<enums.OrderStatus?>? status,
+      Wrapped<bool?>? complete}) {
+    return Order(
+        id: (id != null ? id.value : this.id),
+        petId: (petId != null ? petId.value : this.petId),
+        quantity: (quantity != null ? quantity.value : this.quantity),
+        shipDate: (shipDate != null ? shipDate.value : this.shipDate),
+        status: (status != null ? status.value : this.status),
+        complete: (complete != null ? complete.value : this.complete));
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -1073,14 +914,6 @@ class $CustomJsonDecoder {
       return entity;
     }
 
-    if (isTypeOf<T, Map>()) {
-      return entity;
-    }
-
-    if (isTypeOf<T, Iterable>()) {
-      return entity;
-    }
-
     if (entity is Map<String, dynamic>) {
       return _decodeMap<T>(entity);
     }
@@ -1099,32 +932,6 @@ class $CustomJsonDecoder {
 
   List<T> _decodeList<T>(Iterable values) =>
       values.where((v) => v != null).map<T>((v) => decode<T>(v) as T).toList();
-}
-
-class $JsonSerializableConverter extends chopper.JsonConverter {
-  @override
-  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(
-      chopper.Response response) async {
-    if (response.bodyString.isEmpty) {
-      // In rare cases, when let's say 204 (no content) is returned -
-      // we cannot decode the missing json with the result type specified
-      return chopper.Response(response.base, null, error: response.error);
-    }
-
-    if (ResultType == String) {
-      return response.copyWith();
-    }
-
-    if (ResultType == DateTime) {
-      return response.copyWith(
-          body: DateTime.parse((response.body as String).replaceAll('"', ''))
-              as ResultType);
-    }
-
-    final jsonRes = await super.convertResponse(response);
-    return jsonRes.copyWith<ResultType>(
-        body: $jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
-  }
 }
 
 final $jsonDecoder = $CustomJsonDecoder(generatedMapping);
