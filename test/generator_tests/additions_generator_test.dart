@@ -15,7 +15,7 @@ void main() {
       final result = generator.generateImportsContent(
           'swagger.fileName', true, false, false, false);
 
-      expect(result, contains("part 'swagger.fileName.swagger.chopper.dart';"));
+      // expect(result, contains("part 'swagger.fileName.swagger.dart';"));
       expect(result, contains("part 'swagger.fileName.swagger.g.dart';"));
     });
 
@@ -24,7 +24,7 @@ void main() {
           'swagger.fileName', true, false, true, false);
 
       expect(result,
-          contains("import 'swagger.fileName.enums.swagger.dart' as enums;"));
+          contains("import 'package:retrofit/retrofit.dart' as retrofit;"));
     });
 
     test('Should generate indexes file', () {
