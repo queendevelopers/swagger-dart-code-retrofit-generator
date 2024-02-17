@@ -1,8 +1,11 @@
 name: example
 description: A sample command-line application.
 version: 1.0.0
+description: A sample command-line application.
+version: 1.0.0
 
 environment:
+  sdk: ^3.2.3
   sdk: ^3.2.3
 
 dependencies:
@@ -16,4 +19,5 @@ dev_dependencies:
   retrofit_generator: ^8.1.0
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
+  lints: ^3.0.0
   lints: ^3.0.0

@@ -107,7 +107,31 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         ..optionalParameters.add(Parameter(
           (p) => p
             ..named = true
-            ..type = Reference('String?')
+            ..type = Reference('http.Client?')
+            ..name = 'httpClient',
+        ))
+        ..optionalParameters.add(Parameter(
+          (p) => p
+            ..named = true
+            ..type = Reference('Authenticator?')
+            ..name = 'authenticator',
+        ))
+        ..optionalParameters.add(Parameter(
+          (p) => p
+            ..named = true
+            ..type = Reference('ErrorConverter?')
+            ..name = 'errorConverter',
+        ))
+        ..optionalParameters.add(Parameter(
+          (p) => p
+            ..named = true
+            ..type = Reference('Converter?')
+            ..name = 'converter',
+        ))
+        ..optionalParameters.add(Parameter(
+          (p) => p
+            ..named = true
+            ..type = Reference('Uri?')
             ..name = 'baseUrl',
         ))
         ..redirect = Reference('_$className')
@@ -222,8 +246,12 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         );
         //Although the name is privateMethod, it's public method! :D 
         final privateMethod = _getPrivateMethod(method);
-        // final publicMethod = _getPublicMethod(method, allModels);
-        methods.addAll([privateMethod]);
+        final publicMethod = _getPublicMethod(
+          method,
+          allModels,
+          swaggerRequest.deprecated,
+        );
+        methods.addAll([publicMethod, privateMethod]);
       });
     });
 
@@ -485,10 +513,16 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
   }) {
     return [
       if (isDeprecated) refer('deprecated'),
-      refer(requestType.toUpperCase()).call(
-        [literalString(path)],
+      refer(requestType.pascalCase).call(
+        [],
+        {
+          kPath: literalString(path),
+          if (hasOptionalBody && !isUrlencoded)
+            'optionalBody': refer(true.toString()),
+          if (isUrlencoded)
+            'headers': refer('{contentTypeKey: formEncodedHeaders}')
+        },
       ),
-      if (hasOptionalBody) refer('NoBody').call([]),
       if (isUrlencoded)
         refer(kFactoryConverter.pascalCase).call(
             [], {'request': refer('FormUrlEncodedConverter.requestFactory')}),

@@ -104,39 +104,6 @@ Map<String, dynamic> _$TagToJson(Tag instance) {
   return val;
 }
 
-Pet _$PetFromJson(Map<String, dynamic> json) => Pet(
-      id: json['id'] as int?,
-      category: json['category'] == null
-          ? null
-          : Category.fromJson(json['category'] as Map<String, dynamic>),
-      name: json['name'] as String? ?? '',
-      photoUrls: (json['photoUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      status: petStatusNullableFromJson(json['status']),
-    );
-
-Map<String, dynamic> _$PetToJson(Pet instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  writeNotNull('category', instance.category?.toJson());
-  writeNotNull('name', instance.name);
-  writeNotNull('photoUrls', instance.photoUrls);
-  writeNotNull('tags', instance.tags?.map((e) => e.toJson()).toList());
-  writeNotNull('status', petStatusNullableToJson(instance.status));
-  return val;
-}
-
 ApiResponse _$ApiResponseFromJson(Map<String, dynamic> json) => ApiResponse(
       code: json['code'] as int?,
       type: json['type'] as String? ?? '',
