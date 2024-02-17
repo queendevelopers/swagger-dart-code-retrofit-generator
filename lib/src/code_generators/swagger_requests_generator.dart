@@ -67,7 +67,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
         ])
         // ..extend = Reference(kChopperService)
         ..docs.add(kServiceHeader)
-        ..annotations.add(refer(kRestApi).call([],{'baseUrl':  Reference("'http://${swaggerRoot.host}${swaggerRoot.basePath}'")}))
+        ..annotations.add(refer(kRestApi).call([],{'baseUrl':  Reference("'https://${swaggerRoot.host}${swaggerRoot.basePath}'")}))
         ..abstract = true
         ..name = className,
     );
@@ -1315,7 +1315,7 @@ class SwaggerRequestsGenerator extends SwaggerGeneratorBase {
     String basePath,
   ) {
     final baseUrlString = options.withBaseUrl
-        ? "baseUrl:  baseUrl ?? Uri.parse('http://$host$basePath')"
+        ? "baseUrl:  baseUrl ?? Uri.parse('https://$host$basePath')"
         : 'baseUrl: baseUrl';
 
     final converterString = options.withConverter
