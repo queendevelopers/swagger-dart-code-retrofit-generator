@@ -161,11 +161,12 @@ void main() {
       const propertyName = 'shipDate';
       const jsonKeyExpendedResult = "@JsonKey(name: '$propertyName'";
       final result = generator.generatePropertyContentByDefault(
-        propertyEntryMap,
-        propertyName,
-        [],
-        [],
-        [],
+        prop: propertyEntryMap,
+        propertyName: propertyName,
+        allEnumNames: [],
+        allEnumListNames: [],
+        requiredProperties: [],
+        isDeprecated: false,
       );
 
       expect(result, contains(jsonKeyExpendedResult));
@@ -179,11 +180,12 @@ void main() {
         outputFolder: '',
         includeIfNull: false,
       )).generatePropertyContentByDefault(
-        propertyEntryMap,
-        propertyName,
-        [],
-        [],
-        [],
+        prop: propertyEntryMap,
+        propertyName: propertyName,
+        allEnumNames: [],
+        allEnumListNames: [],
+        requiredProperties: [],
+        isDeprecated: false,
       );
 
       expect(result, contains(', includeIfNull: false'));
@@ -193,11 +195,12 @@ void main() {
       final propertyEntryMap = SwaggerSchema(originalRef: 'Pet');
       const propertyName = 'shipDate';
       final result = generator.generatePropertyContentByDefault(
-        propertyEntryMap,
-        propertyName,
-        [],
-        [],
-        [],
+        prop: propertyEntryMap,
+        propertyName: propertyName,
+        allEnumNames: [],
+        allEnumListNames: [],
+        requiredProperties: [],
+        isDeprecated: false,
       );
 
       expect(result.contains(', includeIfNull: false'), equals(false));
@@ -221,6 +224,7 @@ void main() {
         [],
         [],
         {},
+        'fle_name',
       );
 
       expect(result, contains(classExpectedResult));
@@ -243,6 +247,7 @@ void main() {
         [],
         [],
         {},
+        'fle_name',
       );
 
       expect(result, contains(classExpectedResult));
@@ -420,16 +425,17 @@ void main() {
 
       const propertyExpectedResult = 'final List<Object>? dog';
       final result = generator.generateListPropertyContent(
-        propertyName,
-        propertyKey,
-        className,
-        map,
-        [],
-        [],
-        [],
-        {},
-        [],
-        {},
+        propertyName: propertyName,
+        propertyKey: propertyKey,
+        className: className,
+        prop: map,
+        classesWithNullableLists: [],
+        allEnumNames: [],
+        allEnumListNames: [],
+        basicTypesMap: {},
+        requiredProperties: [],
+        allClasses: {},
+        isDeprecated: false,
       );
 
       expect(result, contains(jsonKeyExpectedResult));
@@ -442,16 +448,17 @@ void main() {
       const className = 'Animals';
       const propertyKey = 'Dog';
       final result = generator.generateListPropertyContent(
-        propertyName,
-        propertyKey,
-        className,
-        map,
-        [],
-        ['Dog'],
-        [],
-        {},
-        [],
-        {},
+        propertyName: propertyName,
+        propertyKey: propertyKey,
+        className: className,
+        prop: map,
+        classesWithNullableLists: [],
+        allEnumNames: ['Dog'],
+        allEnumListNames: [],
+        basicTypesMap: {},
+        requiredProperties: [],
+        allClasses: {},
+        isDeprecated: false,
       );
 
       expect(
@@ -466,16 +473,17 @@ void main() {
       const propertyKey = 'Dog';
 
       final result = generator.generateListPropertyContent(
-        propertyName,
-        propertyKey,
-        className,
-        map,
-        [],
-        [],
-        [],
-        {},
-        [],
-        {},
+        propertyName: propertyName,
+        propertyKey: propertyKey,
+        className: className,
+        prop: map,
+        classesWithNullableLists: [],
+        allEnumNames: [],
+        allEnumListNames: [],
+        basicTypesMap: {},
+        requiredProperties: [],
+        allClasses: {},
+        isDeprecated: false,
       );
 
       expect(result, contains('final List<TestOriginalRef>? dog;'));
@@ -489,16 +497,17 @@ void main() {
       const propertyKey = 'Dog';
 
       final result = generator.generateListPropertyContent(
-        propertyName,
-        propertyKey,
-        className,
-        map,
-        [],
-        [],
-        [],
-        {},
-        [],
-        {},
+        propertyName: propertyName,
+        propertyKey: propertyKey,
+        className: className,
+        prop: map,
+        classesWithNullableLists: [],
+        allEnumNames: [],
+        allEnumListNames: [],
+        basicTypesMap: {},
+        requiredProperties: [],
+        allClasses: {},
+        isDeprecated: false,
       );
 
       expect(result, contains('final List<TestObject>? dog;'));

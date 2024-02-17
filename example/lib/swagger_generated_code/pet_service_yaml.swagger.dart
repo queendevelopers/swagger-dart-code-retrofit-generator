@@ -7,9 +7,7 @@ import 'dart:convert';
 import 'package:retrofit/retrofit.dart';
 
 import 'client_mapping.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart' show MultipartFile;
+// import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart' as retrofit;
 import 'pet_service_yaml.enums.swagger.dart' as enums;
@@ -54,6 +52,7 @@ abstract class PetServiceYaml {
 
   ///Finds Pets by tags
   ///@param tags Tags to filter by
+  @deprecated
   @GET('/pet/findByTags')
   Future<retrofit.HttpResponse<List<Pet>>> petFindByTagsGet({
     @Query('tags') required List<String>? tags,
@@ -721,8 +720,9 @@ enums.OrderStatus? orderStatusNullableFromJson(
   if (orderStatus == null) {
     return null;
   }
-  return enums.OrderStatus.values
-          .firstWhereOrNull((e) => e.value == orderStatus) ??
+  return enums.OrderStatus.values.firstWhereOrNull((e) =>
+          e.value.toString().toLowerCase() ==
+          orderStatus.toString().toLowerCase()) ??
       defaultValue;
 }
 
@@ -786,7 +786,9 @@ enums.PetStatus? petStatusNullableFromJson(
   if (petStatus == null) {
     return null;
   }
-  return enums.PetStatus.values.firstWhereOrNull((e) => e.value == petStatus) ??
+  return enums.PetStatus.values.firstWhereOrNull((e) =>
+          e.value.toString().toLowerCase() ==
+          petStatus.toString().toLowerCase()) ??
       defaultValue;
 }
 
@@ -852,8 +854,9 @@ enums.PetFindByStatusGetStatus? petFindByStatusGetStatusNullableFromJson(
   if (petFindByStatusGetStatus == null) {
     return null;
   }
-  return enums.PetFindByStatusGetStatus.values
-          .firstWhereOrNull((e) => e.value == petFindByStatusGetStatus) ??
+  return enums.PetFindByStatusGetStatus.values.firstWhereOrNull((e) =>
+          e.value.toString().toLowerCase() ==
+          petFindByStatusGetStatus.toString().toLowerCase()) ??
       defaultValue;
 }
 

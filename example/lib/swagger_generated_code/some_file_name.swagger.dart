@@ -10,21 +10,21 @@ import 'client_mapping.dart';
 // import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart' as retrofit;
-import 'pet_service_json.enums.swagger.dart' as enums;
-export 'pet_service_json.enums.swagger.dart';
+import 'some_file_name.enums.swagger.dart' as enums;
+export 'some_file_name.enums.swagger.dart';
 
-part 'pet_service_json.swagger.g.dart';
+part 'some_file_name.swagger.g.dart';
 
 // **************************************************************************
 // SwaggerRetrofitGenerator
 // **************************************************************************
 
 @RestApi(baseUrl: 'http://petstore.swagger.io/v2')
-abstract class PetServiceJson {
-  factory PetServiceJson.PetServiceJson(
+abstract class SomeFileName {
+  factory SomeFileName.SomeFileName(
     Dio dio, {
     String? baseUrl,
-  }) = _PetServiceJson;
+  }) = _SomeFileName;
 
   ///Add a new pet to the store
   ///@param body Pet object that needs to be added to the store

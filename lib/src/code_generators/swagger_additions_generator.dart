@@ -46,9 +46,10 @@ class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
   ) {
     final result = StringBuffer();
 
-    final overridenModels = options.overridenModels.isEmpty
-        ? ''
-        : 'import \'overriden_models.dart\';';
+    final overridenModels = options.overridenModels
+            .any((e) => e.fileName == swaggerFileName)
+        ? 'import \'${options.overridenModels.firstWhere((e) => e.fileName == swaggerFileName).importUrl}\';'
+        : '';
 
     final retrofitImports = buildOnlyModels
         ? ''
@@ -56,8 +57,6 @@ class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
 
 import 'client_mapping.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart' show MultipartFile;
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart' as retrofit;''';
 

@@ -1,9 +1,3 @@
-const List<String> successResponseCodes = [
-  '200',
-  '201',
-  '202',
-];
-
 const List<String> kKeyClasses = [
   'Response',
   'Request',
@@ -59,6 +53,8 @@ const kOptionalBody = 'optionalBody';
 const kFormData = 'formData';
 const kMultipart = 'multipart';
 const kDateTimeFormat = 'date-time';
+const kFactoryConverter = 'factoryConverter';
+const kDeprecatedAnnotation = '@deprecated';
 
 const kDefaultBodyParameter = 'Object';
 const kField = 'Field';
@@ -89,7 +85,6 @@ const kArray = 'array';
 const kEnum = 'enum';
 const kBody = 'body';
 const kQuery = 'query';
-const kExplodedQuery ='ExplodedQuery';
 const kPartFile = 'partFile';
 const kPart = 'part';
 
@@ -103,6 +98,7 @@ const kEnumNames = 'x-enumNames';
 const kEnumVarnames = 'x-enum-varnames';
 const kIsNullable = 'x-nullable';
 const kNullable = 'nullable';
+const kUrlencoded = 'urlencoded';
 
 const kServiceHeader = '''
 // **************************************************************************

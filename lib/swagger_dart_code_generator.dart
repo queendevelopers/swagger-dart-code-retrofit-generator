@@ -46,8 +46,9 @@ String _getAdditionalResultPath(GeneratorOptions options) {
   }
 
   if (options.inputUrls.isNotEmpty) {
+    final firstUrl = options.inputUrls.first;
     final path = normalize(
-        '${options.inputFolder}${getFileNameBase(options.inputUrls.first)}');
+        '${options.inputFolder}${firstUrl.fileName ?? getFileNameBase(firstUrl.url)}');
     File(path).createSync();
     return path;
   }
@@ -63,20 +64,6 @@ Map<String, List<String>> _generateExtensions(GeneratorOptions options) {
   additionalResultPath =
       _getAdditionalResultPath(options).replaceAll('\\', '/');
 
-  if (options.overridenModels.isNotEmpty) {
-    final path = normalize('${options.outputFolder}overriden_models.dart');
-
-    if (!Directory(options.outputFolder).existsSync()) {
-      Directory(options.outputFolder).createSync();
-    }
-
-    if (!File(path).existsSync()) {
-      File(path).createSync();
-      File(path).writeAsString(
-          '//Put your overriden models here (${options.overridenModels.join(',')})');
-    }
-  }
-
   File(additionalResultPath).createSync();
 
   var out = normalize(options.outputFolder);
@@ -85,7 +72,7 @@ Map<String, List<String>> _generateExtensions(GeneratorOptions options) {
   final fileNames = filesList.map((e) => getFileNameBase(e.path));
 
   allFiledList.addAll(filesPaths);
-  allFiledList.addAll(options.inputUrls);
+  allFiledList.addAll(options.inputUrls.map((e) => e.fileName ?? e.url));
 
   result[additionalResultPath] = {};
 
@@ -102,12 +89,14 @@ Map<String, List<String>> _generateExtensions(GeneratorOptions options) {
     result[url]!.add(join(out, '$name$_outputResponsesFileExtension'));
   }
 
-  for (var url in options.inputUrls) {
-    if (fileNames.contains(getFileNameBase(url))) {
+  for (var inputUrl in options.inputUrls) {
+    if (fileNames
+        .contains(getFileNameBase(inputUrl.fileName ?? inputUrl.url))) {
       continue;
     }
 
-    final name = removeFileExtension(getFileNameBase(url));
+    final name =
+        removeFileExtension(getFileNameBase(inputUrl.fileName ?? inputUrl.url));
 
     result[additionalResultPath]!.add(join(out, '$name$_outputFileExtension'));
     result[additionalResultPath]!
@@ -153,9 +142,9 @@ class SwaggerDartCodeGenerator implements Builder {
   Future<void> build(BuildStep buildStep) async {
     if (buildStep.inputId.path == additionalResultPath) {
       for (final url in options.inputUrls) {
-        final fileNameWithExtension = getFileNameBase(url);
+        final fileNameWithExtension = getFileNameBase(url.fileName ?? url.url);
 
-        final contents = await _download(url);
+        final contents = await _download(url.url);
 
         final filePath = join(options.inputFolder, fileNameWithExtension);
         await File(filePath).create();
@@ -192,6 +181,9 @@ class SwaggerDartCodeGenerator implements Builder {
       fileNameWithExtension: fileNameWithExtension,
       fileNameWithoutExtension: fileNameWithoutExtension,
     );
+    final result = await Process.run('dart', ['fix', '--apply']);
+    print(result.stdout);
+    print(result.stderr);
   }
 
   Future<void> _generateAndWriteFile({

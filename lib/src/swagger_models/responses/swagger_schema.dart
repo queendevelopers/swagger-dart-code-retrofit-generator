@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:swagger_dart_code_generator/src/code_generators/constants.dart';
 
-part 'swagger_schema.g2.dart';
+part 'swagger_schema.g.dart';
 
 @JsonSerializable()
 class SwaggerSchema {
@@ -25,37 +25,49 @@ class SwaggerSchema {
     this.hasAdditionalProperties = false,
     this.msEnum,
     this.title = '',
+    this.readOnly = false,
+    this.writeOnly = false,
+    this.deprecated = false,
   });
 
-  @JsonKey(name: 'type', defaultValue: '')
+  @JsonKey(name: 'readOnly')
+  bool readOnly;
+
+  @JsonKey(name: 'writeOnly')
+  bool writeOnly;
+
+  @JsonKey(name: 'type')
   String type;
 
-  @JsonKey(name: 'title', defaultValue: '')
+  @JsonKey(name: 'deprecated')
+  bool deprecated;
+
+  @JsonKey(name: 'title')
   String title;
 
-  @JsonKey(name: 'format', defaultValue: '')
+  @JsonKey(name: 'format')
   String format;
 
-  @JsonKey(name: 'default', defaultValue: null)
+  @JsonKey(name: 'default')
   Object? defaultValue;
 
-  @JsonKey(name: 'originalRef', defaultValue: '')
+  @JsonKey(name: 'originalRef')
   String originalRef;
 
   bool get hasOriginalRef => originalRef.isNotEmpty;
 
-  @JsonKey(name: '\$ref', defaultValue: '')
+  @JsonKey(name: '\$ref')
   String ref;
 
   bool get hasRef => ref.isNotEmpty;
 
-  @JsonKey(name: 'description', defaultValue: '')
+  @JsonKey(name: 'description')
   String description;
 
-  @JsonKey(name: 'enum', defaultValue: [])
+  @JsonKey(name: 'enum')
   List<Object?> enumValuesObj;
 
-  @JsonKey(name: 'x-ms-enum', defaultValue: null)
+  @JsonKey(name: 'x-ms-enum')
   MsEnum? msEnum;
 
   List<String> get enumValues {
@@ -77,28 +89,27 @@ class SwaggerSchema {
   @JsonKey(name: 'items')
   SwaggerSchema? items;
 
-  @JsonKey(name: 'properties', defaultValue: {})
+  @JsonKey(name: 'properties')
   Map<String, SwaggerSchema> properties;
 
-  @JsonKey(name: 'nullable', defaultValue: null)
+  @JsonKey(name: 'nullable')
   bool? isNullable;
+
+  bool get shouldBeNullable => isNullable == true || readOnly || writeOnly;
 
   @JsonKey(name: 'schema')
   SwaggerSchema? schema;
 
-  @JsonKey(name: 'oneOf', defaultValue: [])
+  @JsonKey(name: 'oneOf')
   List<SwaggerSchema> oneOf;
 
-  @JsonKey(name: 'anyOf', defaultValue: [])
+  @JsonKey(name: 'anyOf')
   List<SwaggerSchema> anyOf;
 
-  @JsonKey(name: 'allOf', defaultValue: [])
+  @JsonKey(name: 'allOf')
   List<SwaggerSchema> allOf;
 
-  @JsonKey(
-      name: 'additionalProperties',
-      defaultValue: false,
-      fromJson: _additionalsFromJson)
+  @JsonKey(name: 'additionalProperties', fromJson: _additionalsFromJson)
   bool hasAdditionalProperties;
 
   List<String>? enumNames;

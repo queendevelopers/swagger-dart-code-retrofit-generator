@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:example/swagger_generated_code/pet_service_yaml.swagger.dart';
 
 void main() async {
-  final petsApi = PetServiceYaml.create();
+  final Dio dio= Dio();
+  final petsApi = PetServiceYaml.PetServiceYaml(dio);
 
   final postResult = await petsApi.petPost(
     body: Pet(
@@ -15,7 +17,7 @@ void main() async {
     ),
   );
 
-  final pet = Pet.fromJson(postResult.body as Map<String, dynamic>);
+  final pet = Pet.fromJson(postResult.response as Map<String, dynamic>);
 
   print('Created pet id: ${pet.id}');
 }
