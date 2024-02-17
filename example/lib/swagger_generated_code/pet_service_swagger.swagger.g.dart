@@ -489,7 +489,7 @@ class _PetServiceSwagger implements PetServiceSwagger {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = _result.data as Object;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -638,7 +638,7 @@ class _PetServiceSwagger implements PetServiceSwagger {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'Cache-Control': cacheControl};
     _headers.removeWhere((k, v) => v == null);
-    final _data = body.map((e) => e.toJson()).toList();
+    final _data = body?.map((e) => e.toJson()).toList();
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
@@ -671,7 +671,7 @@ class _PetServiceSwagger implements PetServiceSwagger {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'Cache-Control': cacheControl};
     _headers.removeWhere((k, v) => v == null);
-    final _data = body.map((e) => e.toJson()).toList();
+    final _data = body?.map((e) => e.toJson()).toList();
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
