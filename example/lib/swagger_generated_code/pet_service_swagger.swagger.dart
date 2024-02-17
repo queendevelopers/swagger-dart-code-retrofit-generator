@@ -21,7 +21,7 @@ part 'pet_service_swagger.swagger.g.dart';
 // SwaggerRetrofitGenerator
 // **************************************************************************
 
-@RestApi(baseUrl: 'http://petstore.swagger.io/v2')
+@RestApi(baseUrl: 'https://petstore.swagger.io/v2')
 abstract class PetServiceSwagger {
   factory PetServiceSwagger.PetServiceSwagger(
     Dio dio, {
@@ -549,9 +549,9 @@ class Pet {
   @JsonKey(name: 'category', includeIfNull: false)
   final Category? category;
   @JsonKey(name: 'name', includeIfNull: false, defaultValue: '')
-  final String? name;
+  final String name;
   @JsonKey(name: 'photoUrls', includeIfNull: false)
-  final List<String>? photoUrls;
+  final List<String> photoUrls;
   @JsonKey(name: 'tags', includeIfNull: false)
   final List<Tag>? tags;
   @JsonKey(
@@ -617,8 +617,8 @@ extension $PetExtension on Pet {
   Pet copyWithWrapped(
       {Wrapped<int?>? id,
       Wrapped<Category?>? category,
-      Wrapped<String?>? name,
-      Wrapped<List<String>?>? photoUrls,
+      Wrapped<String>? name,
+      Wrapped<List<String>>? photoUrls,
       Wrapped<List<Tag>?>? tags,
       Wrapped<enums.PetStatus?>? status}) {
     return Pet(

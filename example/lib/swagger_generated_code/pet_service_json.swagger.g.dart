@@ -110,9 +110,8 @@ Pet _$PetFromJson(Map<String, dynamic> json) => Pet(
           ? null
           : Category.fromJson(json['category'] as Map<String, dynamic>),
       name: json['name'] as String? ?? '',
-      photoUrls: (json['photoUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      photoUrls:
+          (json['photoUrls'] as List<dynamic>).map((e) => e as String).toList(),
       tags: (json['tags'] as List<dynamic>?)
           ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -130,8 +129,8 @@ Map<String, dynamic> _$PetToJson(Pet instance) {
 
   writeNotNull('id', instance.id);
   writeNotNull('category', instance.category?.toJson());
-  writeNotNull('name', instance.name);
-  writeNotNull('photoUrls', instance.photoUrls);
+  val['name'] = instance.name;
+  val['photoUrls'] = instance.photoUrls;
   writeNotNull('tags', instance.tags?.map((e) => e.toJson()).toList());
   writeNotNull('status', petStatusNullableToJson(instance.status));
   return val;
@@ -169,7 +168,7 @@ class _PetServiceJson implements PetServiceJson {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://petstore.swagger.io/v2';
+    baseUrl ??= 'https://petstore.swagger.io/v2';
   }
 
   final Dio _dio;
